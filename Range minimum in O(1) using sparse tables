@@ -1,0 +1,95 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define int             long long 
+#define pll             pair<int,int>
+#define ppll            pair<pair<int,int>,int>
+#define vvll            vector<vector<int>>
+#define l_b             lower_bound
+#define u_b             upper_bound
+#define vll             vector<int>
+#define vpll            vector<pll>
+#define vc              vector <char>
+#define vs              vector <string>
+#define pb              emplace_back
+#define p_b             pop_back()
+#define prq             priority_queue
+#define setbits(x)      __builtin_popcountll(x)
+#define sps(x,y)        fixed<<setprecision(y)<<x
+#define hell            1000000007
+#define rep(i,s,n)      for(int i=s;i<n;i++)
+#define ff              first
+#define mem(arr,x)      memset(arr,x,sizeof(arr))
+#define ss              second
+#define pi              3.14159265358979323846
+#define all(v)          v.begin(),v.end()
+#define allr(x)         x.rbegin(),x.rend()
+#define mp              make_pair
+#define display(x)      for(auto dsp:x)cout<<dsp<<" "; cout<<"\n";
+#define INF             1000000000000000000//18
+#define  lsi(x)         (x & -x)
+void fast() 
+{
+  ios_base::sync_with_stdio(0);
+  cin.tie(0); cout.tie(0);
+#ifndef ONLINE_JUDGE
+  freopen("input.txt", "r", stdin);
+  freopen("output.txt", "w", stdout);
+#endif
+}
+const int N = 5e5+100;
+const int maxN= 20;
+ 
+//---------------------------------------------
+int dr[4] = {1, 0, 0,-1};
+int dc[4] = {0,-1, 1, 0};
+ 
+int ddr[8]= {0, 0, 1, -1, 1, -1, 1, -1};
+int ddc[8]= {1, -1, 0, 0, 1, -1, -1, 1};
+ 
+int ddr1[8]= {1, 1, -1, -1, 2, 2, -2, -2};
+int ddc1[8]= {2, -2, 2, -2, 1, -1, 1, -1};
+//--------------------------------------------
+int n, q;
+int a[N], b[N][25], log1[N+2];
+
+void pre(){
+      log1[1]=0;
+      rep(i, 2, N+1) log1[i]= log1[i/2]+1;
+}
+
+void init(int n){
+      rep(i, 1, n+1) b[i][0]= a[i];
+
+      for(int j=1; j<25; j++){
+            for(int i=1; i+ (1<<j)-1<=n; i++){
+                  b[i][j]= min(b[i][j-1], b[i+ (1<<(j-1))][j-1]);
+            }
+      }
+}
+ 
+int query(int x, int y){
+      int j= log1[(y-x+1)];
+      int ans= min( b[x][j], b[y-(1<<j)+1][j]);
+      return ans;
+}
+ 
+int32_t main() {
+       fast();
+    // int t,z;
+    // cin>>t;
+    // rep(z,1,t+1){
+    // cout<<"Case #"<<z<<": ";
+   
+    cin>>n;
+    rep(i, 1, n+1) cin>>a[i];
+    pre();
+    init(n);
+    cin>>q;
+    while(q--){
+         int x, y;
+         cin>>x>>y;
+         x++; y++;
+         cout<<query(x, y)<<"\n";
+    }
+  }
